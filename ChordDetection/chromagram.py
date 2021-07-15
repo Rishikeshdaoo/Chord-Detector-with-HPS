@@ -50,7 +50,7 @@ def compute_stft(xb, fs, block_size, hop_size):
 
     for n in range(0, numBlocks):
         # apply window
-        tmp = abs(sp.fft(xb[n, :] * afWindow)) * 2 / xb.shape[1]
+        tmp = abs(sp.ifft(xb[n, :] * afWindow)) * 2 / xb.shape[1]
 
         # compute magnitude spectrum
         X[:, n] = tmp[range(math.ceil(tmp.size / 2 + 1))]
@@ -126,5 +126,4 @@ def extract_pitch_chroma(X, fs, tfInHz, baseline_ver = 1):
     l2norm = np.linalg.norm(pitch_chroma, ord=2, axis=0)
     l2norm[l2norm == 0] = 1
     pitch_chroma /= l2norm
-
     return pitch_chroma

@@ -32,6 +32,7 @@ def chord_detection(audio):
         if chord is 'N':
             continue
         templates.append(templates_json[chord])
+    print(templates)
 
     x = file_normalize(audio)
 
@@ -72,9 +73,9 @@ def chord_detection_filepath(filepath):
         if chord is 'N':
             continue
         templates.append(templates_json[chord])
+    print(templates)
 
     fs, x = file_read(filepath)
-
     if len(x.shape) > 1:
         x = x[:,1]
 
@@ -90,11 +91,13 @@ def chord_detection_filepath(filepath):
     cor_vec = np.zeros(24)
     for idx in range(24):
         cor_vec[idx] = np.dot(chroma_template, np.array(templates[idx]))
+    print(cor_vec)
     idx_max_cor = np.argmax(cor_vec)
+    print(idx_max_cor)
 
     idx_chord = int(idx_max_cor + 1)
     chord_name = tuple(chords[idx_chord].split(" "))
-
+    print(chord_name)
     # # Plotting all figures
     # plt.figure(1)
     # notes = ['G','G#','A','A#','B','C','C#','D','D#','E','F','F#']
