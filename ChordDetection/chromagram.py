@@ -83,9 +83,9 @@ def extract_pitch_chroma(X, fs, tfInHz, baseline_ver = 1):
     if baseline_ver == 1:
         Y = np.abs(X) ** 2
     elif baseline_ver == 2:
-        Y = HPS(X, fs, 2)
+        Y = HPS(X, fs, 4)
     else:
-        Y = HPS(X, fs, 2)
+        Y = HPS(X, fs, 4)
 
     # Need to calculate pitch chroma from C3 to B5 --> 48 to 83
     lower_bound = 48
