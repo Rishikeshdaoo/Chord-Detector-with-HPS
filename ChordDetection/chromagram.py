@@ -26,6 +26,7 @@ def block_audio(x, blockSize, hopSize, fs):
     # compute time stamps
     t = (np.arange(0, numBlocks) * hopSize) / fs
     x = np.concatenate((x, np.zeros(blockSize)), axis=0)
+
     for n in range(0, numBlocks):
         i_start = n * hopSize
         i_stop = np.min([x.size - 1, i_start + blockSize - 1])
@@ -34,12 +35,14 @@ def block_audio(x, blockSize, hopSize, fs):
 
     return xb, t
 
+
 # Apply Von-Hann window
 def compute_hann(iWindowLength):
     """
     Sample compute hann window code from Alex
     """
     return 0.5 - (0.5 * np.cos(2 * np.pi / iWindowLength * np.arange(iWindowLength)))
+
 
 # Computes the Short Time Fourier Transform
 def compute_stft(xb, fs, block_size, hop_size):
@@ -83,9 +86,9 @@ def extract_pitch_chroma(X, fs, tfInHz, baseline_ver = 1):
     if baseline_ver == 1:
         Y = np.abs(X) ** 2
     elif baseline_ver == 2:
-        Y = HPS(X, fs, 4)
+        Y = HPS(X, fs, 2)
     else:
-        Y = HPS(X, fs, 4)
+        Y = HPS(X, fs, 2)
 
     # Need to calculate pitch chroma from C3 to B5 --> 48 to 83
     lower_bound = 48

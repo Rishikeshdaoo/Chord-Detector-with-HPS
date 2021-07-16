@@ -1,4 +1,4 @@
-from ChordDetection.chroma_chord_detection import chord_detection, chord_detection_filepath
+from ChordDetection.chroma_chord_detection import chord_detection, chord_detection_filepath, chord_detection_prefilepath
 
 import numpy as np
 import pyaudio # Soundcard audio I/O access library
@@ -35,7 +35,7 @@ def clicked():
     itterations = 0
     chords = []
     print("Recording:")
-    while True:
+    if True:
 
 
 
@@ -58,7 +58,7 @@ def clicked():
         waveFile.setframerate(RATE)
         waveFile.writeframes(b''.join(frames))
         waveFile.close()
-        chord_name = chord_detection_filepath("./output.wav")
+        chord_name = chord_detection_prefilepath("./wav.wav")
 
         chord_lbl = Label(window, text=chord_name)
         chord_lbl.grid(column=12, row=10)
