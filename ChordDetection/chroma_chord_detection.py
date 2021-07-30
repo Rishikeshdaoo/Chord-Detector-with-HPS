@@ -11,9 +11,9 @@ with open('chord_template.json', 'r') as fp:
     templates_json = json.load(fp)
 
 # List of the 24 (major and minor) chord classes
-chords = ['N','G maj','G# maj','A maj','A# maj','B maj','C maj','C# maj',
-            'D maj','D# maj','E maj','F maj','F# maj','G min','G# min','A min',
-            'A# min','B min','C min','C# min','D min','D# min','E min','F min','F# min', 'A7']
+chords = ['N', 'G maj', 'G# maj', 'A maj', 'A# maj', 'B maj', 'C maj', 'C# maj',
+            'D maj','D# maj','E maj', 'E7', 'F maj','F# maj','G min','G# min','A min',
+            'A# min','B min','C min','C# min','D min','D# min','E min','F min','F# min']
 
 templates = []
 
@@ -45,8 +45,8 @@ def chord_detection(audio):
     chroma_template = np.mean(chroma, axis=1)
 
     """Correlate 12D chroma vector with each of 24 major and minor chords"""
-    cor_vec = np.zeros(25)
-    for idx in range(25):
+    cor_vec = np.zeros(24)
+    for idx in range(24):
         cor_vec[idx] = np.dot(chroma_template, np.array(templates[idx]))
     idx_max_cor = np.argmax(cor_vec)
 
@@ -86,19 +86,26 @@ def chord_detection_filepath(filepath):
 
     chroma = extract_pitch_chroma(X, fs, reference_frequency)
 
+    print('-----------------------------------')
+    # print(chroma)
     chroma_template = np.mean(chroma, axis=1)
+    print('')
+    for i in range(len(chroma_template)):
+        if chroma_template[i] < 0.05:
+            chroma_template[i] = 0
+    print(chroma_template)
 
     """Correlate 12D chroma vector with each of 24 major and minor chords"""
-    cor_vec = np.zeros(25)
-    for idx in range(25):
+    cor_vec = np.zeros(24)
+    for idx in range(24):
         cor_vec[idx] = np.dot(chroma_template, np.array(templates[idx]))
-    #print(cor_vec)
+    print(cor_vec)
     idx_max_cor = np.argmax(cor_vec)
     #print(idx_max_cor)
 
     idx_chord = int(idx_max_cor + 1)
     chord_name = tuple(chords[idx_chord].split(" "))
-    print(chord_name)
+    # print(chord_name)
     # # Plotting all figures
     # plt.figure(1)
     # notes = ['G','G#','A','A#','B','C','C#','D','D#','E','F','F#']
@@ -123,26 +130,26 @@ def chord_detection_prefilepath(filepath):
     fs, x = file_read(filepath)
     if len(x.shape) > 1:
         x = x[:, 1]
-
-
-
-
     xb, t = block_audio(x, block_size, hop_size, fs)
     for i in range(0, len(xb) - 80, 80):
         X, fs = compute_stft(xb[i:i+80], fs, block_size, hop_size)
 
         chroma = extract_pitch_chroma(X, fs, reference_frequency)
-
+        print('-----------------------------------')
+        #print(chroma)
         chroma_template = np.mean(chroma, axis=1)
-
+        for i in range(len(chroma_template)):
+            if chroma_template[i] < 0.07:
+                chroma_template[i] = 0
+        print('')
+        print(chroma_template)
         """Correlate 12D chroma vector with each of 24 major and minor chords"""
         cor_vec = np.zeros(25)
         for idx in range(25):
             cor_vec[idx] = np.dot(chroma_template, np.array(templates[idx]))
-        #print(cor_vec)
+        print(templates)
+        print(cor_vec)
         idx_max_cor = np.argmax(cor_vec)
-        #print(idx_max_cor)
-
         idx_chord = int(idx_max_cor + 1)
         chord_name = tuple(chords[idx_chord].split(" "))
         print(chord_name)

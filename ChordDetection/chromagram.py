@@ -93,7 +93,6 @@ def extract_pitch_chroma(X, fs, tfInHz, baseline_ver = 1):
     # Need to calculate pitch chroma from C3 to B5 --> 48 to 83
     lower_bound = 48
     upper_bound = 84
-
     block_length = Y.shape[0]
     num_blocks = Y.shape[1]
     pitch_chroma = np.zeros((12, block_length), dtype=np.int16)
